@@ -1,26 +1,47 @@
 import React from 'react'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import './App.css'
 
 const initialMovies = {
   listName: 'Movies',
-  movies: [
+  list: [
     'Rambo', 'Hakerzy', 'Matrix'
+  ]
+}
+
+const initialActors = {
+  listName: 'Actors',
+  list: [
+    'Tom Hanks', 'Julia Roberts', 'Natalie Portman'
   ]
 }
 
 function movies(state = initialMovies, action) {
   switch (action.type) {
-    case 'ADD':
-      return { ...state, movies: [...state.movies, action.movie] }
-    case 'RESET':
-      return { ...movies, movies: [] }
+    case 'ADD_MOVIE':
+      return { ...state, list: [...state.list, action.movie] }
+    case 'RESET_MOVIES':
+      return { ...state, list: [] }
     default:
       return state
   }
 }
 
-const store = createStore(movies)
+function actors(state = initialActors, action) {
+  switch (action.type) {
+    case 'ADD_ACTOR':
+      return { ...state, list: [...state.list, action.actor] }
+    case 'RESET_ACTORS':
+      return { ...state, list: [] }
+    default:
+      return state
+  }
+}
+
+const allReducers = combineReducers({ movies, actors })
+
+const store = createStore(allReducers, composeWithDevTools())
 window.store = store
 
 function App() {
