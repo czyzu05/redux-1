@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, bindActionCreators } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import './App.css'
 
@@ -42,6 +42,13 @@ function actors(state = initialActors, action) {
 const allReducers = combineReducers({ movies, actors })
 
 const store = createStore(allReducers, composeWithDevTools())
+
+const addActor = actor => ({ type: 'ADD_ACTOR', actor })
+store.dispatch(addActor('Cezary Pazura'))
+
+const actorsActions = bindActionCreators({ add: addActor }, store.dispatch)
+actorsActions.add('Jan Frycz')
+
 window.store = store
 
 function App() {
